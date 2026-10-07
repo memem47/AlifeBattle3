@@ -1,0 +1,286 @@
+# AlifeBattle3 Development Guide
+
+## 1. Development Goal
+
+The goal of this project is not to manually implement and understand every line of code.
+
+The goal is to develop the ability to design, review, modify, and evolve a moderately complex simulation system while using AI coding tools effectively.
+
+AI-generated implementation is acceptable and expected.
+
+Human review should focus on architecture, responsibilities, behavior, and important algorithms.
+
+---
+
+## 2. Required Understanding Level
+
+For every implementation, the developer should understand the following levels.
+
+### Level 1 — File Responsibility
+
+Understand why each source file exists.
+
+Example:
+
+```text
+game.py
+Controls the battle simulation lifecycle.
+```
+
+### Level 2 — Class Responsibility
+
+Understand what each major class owns and controls.
+
+Example:
+
+```text
+Platoon
+Stores a group of agents and the platoon's current command.
+```
+
+### Level 3 — Function Responsibility
+
+Understand what important functions do.
+
+Example:
+
+```text
+Platoon.set_destination()
+Sets a new movement destination for the platoon.
+```
+
+This is the normal required review level.
+
+---
+
+Detailed line-by-line understanding is not required unless:
+
+- behavior is incorrect
+- performance is poor
+- the algorithm is architecturally important
+- the code must be modified manually
+- the implementation is difficult to trust
+
+---
+
+## 3. Development Cycle
+
+Development should proceed in playable vertical slices.
+
+Preferred cycle:
+
+```text
+Design
+  ↓
+Generate implementation
+  ↓
+Run
+  ↓
+Play
+  ↓
+Inspect behavior
+  ↓
+Review architecture
+  ↓
+Fix important problems
+  ↓
+Commit
+```
+
+Avoid spending many commits implementing infrastructure that produces no visible gameplay change.
+
+---
+
+## 4. Commit Principle
+
+Whenever practical, a development commit should produce an observable improvement.
+
+Good examples:
+
+```text
+feat: add platoon selection and movement commands
+
+feat: add waypoint movement
+
+feat: add ranged combat between platoons
+
+feat: add battle victory conditions
+```
+
+Avoid unnecessarily small commits such as:
+
+```text
+add helper function
+
+rename temporary variable
+
+add unused architecture abstraction
+```
+
+unless they are part of deliberate refactoring.
+
+---
+
+## 5. Architecture Principle
+
+The system should separate tactical commands from physical execution.
+
+Conceptually:
+
+```text
+Player / Commander AI
+        ↓
+     Platoon
+        ↓
+      Agent
+        ↓
+Physics / Combat
+```
+
+### Player / Commander AI
+
+Responsible for deciding what platoons should do.
+
+### Platoon
+
+Responsible for:
+
+- command state
+- waypoint queue
+- attack target
+- membership
+- high-level movement intent
+
+### Agent
+
+Responsible for:
+
+- individual state
+- physical position
+- velocity
+- orientation
+- health
+- executing platoon intent
+
+### Physics
+
+Responsible for:
+
+- physical occupancy
+- collision resolution
+- movement constraints
+
+### Combat
+
+Responsible for:
+
+- attack eligibility
+- attack timing
+- damage
+- death
+
+### Renderer
+
+Responsible only for visualization.
+
+Game rules must not depend on rendering code.
+
+---
+
+## 6. Performance Principle
+
+The initial target is at least:
+
+**600 active agents**
+
+Performance must therefore be considered early.
+
+However, optimization should follow measurement.
+
+Use this sequence:
+
+```text
+implement
+→ measure
+→ identify bottleneck
+→ optimize
+```
+
+Do not introduce complex optimization without measured need.
+
+---
+
+## 7. First Playable Development Scope
+
+The first playable milestone includes:
+
+- application startup
+- battlefield rendering
+- 3 × 100 agents per side
+- platoon selection
+- movement commands
+- waypoint queue
+- physical agent movement
+- attack target selection
+- combat
+- damage and death
+- victory condition
+
+Not included initially:
+
+- merge
+- split
+- advanced AI
+- terrain
+- advanced unit types
+- detailed animations
+
+---
+
+## 8. Review Checklist
+
+Before accepting an AI-generated implementation, review:
+
+### Structure
+
+- What files were added or changed?
+- Why does each file exist?
+- Are responsibilities clearly separated?
+
+### Classes
+
+- What major classes exist?
+- What state does each class own?
+- Are responsibilities duplicated?
+
+### Functions
+
+For important functions:
+
+- What calls it?
+- What does it change?
+- What does it return?
+- Does its name match its responsibility?
+
+### Behavior
+
+- What visible behavior changed?
+- How can it be tested manually?
+
+### Performance
+
+- Does the change add work per agent?
+- Is that work performed every frame?
+- Does complexity grow significantly with agent count?
+
+---
+
+## 9. Key Rule
+
+Do not optimize the project for maximum code understanding.
+
+Optimize it for:
+
+> maximum understanding of the system with minimum unnecessary implementation effort.
+
+The developer should remain able to explain the architecture and important behavior even when much of the detailed implementation is generated by AI.
