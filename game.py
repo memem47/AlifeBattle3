@@ -53,13 +53,13 @@ class Game:
         self,
         position: pygame.Vector2,
     ) -> None:
-        """Select one Red platoon at the requested position."""
+        """Select one Blue platoon at the requested position."""
 
         for platoon in self.platoons:
             platoon.selected = False
 
         for platoon in reversed(self.platoons):
-            if platoon.team != "red":
+            if platoon.team != "blue":
                 continue
 
             if platoon.contains_point(position):
